@@ -245,38 +245,58 @@ train_x=train[,-1]
 test_y=test[,1]
 test_x=test[,-1]
 
-#Training&testing
-lmod=lm(y~.,data = train)
-lmod_aic = stepAIC(lmod, direction = 'backward')
-predaic = predict(lmod_aic,test_x)
-MSE(predaic,test_y)
-MSE(predict(lmod,test_x),test_y)
+#Training
 
+#lmod
+lmod=lm(y~.,data = train)
+#glm
+mod_glm = glm(y~.,data = train)
+#backward AIC
+lmod_aic = stepAIC(lmod, direction = 'backward')
+#lasso
 mod_lasso = glmnet(data.matrix(train_x), train_y, alpha = 1)
 mod_lasso2 = glmnet(data.matrix(train_x), train_y, alpha = 1, lambda = min(mod_lasso$lambda))
-predlasso = predict.glmnet(mod_lasso2,data.matrix(test_x))
-MSE(predlasso,test_y)
+#ridge
+mod_ridge = glmnet(data.matrix(train_x), train_y, alpha = 0)
+mod_ridge2 = glmnet(data.matrix(train_x), train_y, alpha = 0, lambda = min(mod_ridge$lambda))
+#elastic net
+mod_el = glmnet(data.matrix(train_x), train_y, alpha = .5)
+mod_el2 = glmnet(data.matrix(train_x), train_y, alpha = .5, lambda = min(mod_el$lambda))
 
+#Testing
+
+#lmod
+MSE(predict(lmod,test_x),test_y)
+#glm
+MSE(predict(mod_glm,test),test_y)
+#backward AIC
+MSE(predict(lmod_aic, test_x),test_y)
+#lasso
+MSE(predict.glmnet(mod_lasso2,data.matrix(test_x)),test_y)
+#ridge
+MSE(predict.glmnet(mod_ridge2,data.matrix(test_x)),test_y)
+#elastic net
+MSE(predict.glmnet(mod_el2,data.matrix(test_x)),test_y)
 
 #Visualize the residuals
 par(mfrow=c(1,1))
-plot(y[1:50], pch=16, cex=1, ylim = c(0.7,5.3),
+plot(test_y[1:50], pch=16, cex=1, ylim = c(0.7,5.3),
      xlab = 'Observation', ylab = 'Mental health score', main = 'Residual Plot of first 50 observations')
 
-mod_lasso = glmnet(data.matrix(x), y, alpha = 1)
-mod_lasso2 = glmnet(data.matrix(x), y, alpha = 1, lambda = min(mod_lasso$lambda))
-predlasso = predict.glmnet(mod_lasso2,data.matrix(x))
-lines(predlasso[1:50], col = 'red')
+lines(predict(lmod,test_x)[1:50], col = 'red')
+lines(predict(mod_glm,test)[1:50], col = 'blue')
+lines(predict(lmod_aic, test_x)[1:50], col = 'green')
+lines(predict.glmnet(mod_lasso2,data.matrix(test_x))[1:50], col = 'yellow')
+lines(predict.glmnet(mod_ridge2,data.matrix(test_x))[1:50], col = 'orange')
+lines(predict.glmnet(mod_el2,data.matrix(test_x))[1:50], col = 'purple')
 
-lmod=lm(y~.,data = cl_data)
-lmod_aic = stepAIC(lmod, direction = 'backward')
-predaic = predict(lmod_aic,x)
-lines(predaic[1:50], col = 'blue')
-
-legend(20,2,legend = c('LASSO Prediction','Backward AIC Prediction'),col = c('red','blue'),lty = 1:2)
+legend(0,2.5,legend = c('Linear regression','Generalized linear model'
+                       ,'Backward AIC','Lasso regression','Ridge regression','Elastic net')
+       ,col = c('red','blue','green','yellow','orange','purple'),lty = 1:6, cex = 0.6)
 
 #range
-c(min(predaic),max(predaic))
-c(min(predlasso),max(predlasso))
+c(min(predict(lmod,test_x)),max(predict(lmod,test_x)))
 
-
+unique(train$gender)
+unique(train$diet)
+unique(train$region)
