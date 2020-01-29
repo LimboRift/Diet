@@ -185,12 +185,7 @@ for (i in 6:20) {
 }
 
 x[,6:20]=xm[,6:20]
-ac=c(23.5,34.5,44.5,54.5)
-xa=matrix(0,nrow(x),1)
-for (i in 1:nrow(x)) {
-  xa[i,1]=ac[which(x[i,2]==unique(x[,2]))]
-}
-x[,2]=xa[,1]
+
 savex = x
 x = savex
 
@@ -297,6 +292,45 @@ legend(0,2.5,legend = c('Linear regression','Generalized linear model'
 #range
 c(min(predict(lmod,test_x)),max(predict(lmod,test_x)))
 
+#coef
+
 unique(train$gender)
 unique(train$diet)
 unique(train$region)
+
+#Try to split data according to gender/diet/region
+train_f = train[(train[,2]=='Female'),c(-2,-4,-6)]
+test_f = test[(test[,2]=='Female'),c(-2,-4,-6)]
+train_f_x = train_f[,-1]
+train_f_y = train_f[,1]
+test_f_x = test_f[,-1]
+tesf_f_y = test_f[,1]
+
+train_m = train[(train[,2]=='Male'),c(-2,-4,-6)]
+test_m = test[(test[,2]=='Male'),c(-2,-4,-6)]
+train_m_x = train_m[,-1]
+train_m_y = train_m[,1]
+test_m_x = test_m[,-1]
+tesf_m_y = test_m[,1]
+
+train_wes = train[(train[,6]==unique(train[,6])[2]),c(-2,-4,-6)]
+test_wes = test[(test[,6]==unique(train[,6])[2]),c(-2,-4,-6)]
+train_wes_x = train_wes[,-1]
+train_wes_y = train_wes[,1]
+test_wes_x = test_wes[,-1]
+test_wes_y = test_wes[,1]
+
+train_est = train[(train[,6]==unique(train[,6])[3]),c(-2,-4,-6)]
+test_est = test[(test[,6]==unique(train[,6])[3]),c(-2,-4,-6)]
+train_est_x = train_est[,-1]
+train_est_y = train_est[,1]
+test_est_x = test_est[,-1]
+test_est_y = test_est[,1]
+
+train_med = train[(train[,6]==unique(train[,6])[1]),c(-2,-4,-6)]
+test_med = train[(test[,6]==unique(train[,6])[1]),c(-2,-4,-6)]
+train_med_x = train_med[,-1]
+train_med_y = train_med[,1]
+test_med_x = test_med[,-1]
+test_med_y = test_med[,1]
+
