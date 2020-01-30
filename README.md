@@ -1,2 +1,2 @@
 # Diet
-Statistical Analysis for Linda B.
+Statistical Analysis for Lina B.
