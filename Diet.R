@@ -218,6 +218,8 @@ for (i in 1:dim(x)[1]) {
 }
 x[,4]=xmm
 
+
+
 par(mfrow=c(2,2))
 for (i in 1:dim(x)[2]) {
   what=matrix(0,1,length(unique(x[,i])))
@@ -228,6 +230,8 @@ for (i in 1:dim(x)[2]) {
   barplot(what,main=as.character(colnames(x)[i]),xlab='type/frequency',ylab = 'average score')
 }
 par(mfrow=c(1,1))
+
+
 
 cl_data=cbind(y,x)
 
