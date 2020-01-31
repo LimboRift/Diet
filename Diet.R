@@ -231,6 +231,38 @@ for (i in 1:dim(x)[2]) {
 }
 par(mfrow=c(1,1))
 
+for (i in 1:dim(x)[2]) {
+  what=matrix(0,1,length(unique(x[,i])))
+  colnames(what)=sort(unique(x[,i]))
+  for (j in 1:length(unique(x[,i]))) {
+    what[1,j]=mean(y[x[,i]==sort(unique(x[,i]))[j]])
+  }
+  gp = ggplot(data = data, aes(x = x[,i], y = y))+geom_jitter(width = .3)+ggtitle(as.character(colnames(x)[i]))+xlab('type/frequency')
+  gp = gp + 
+  print(gp)
+}
+i = 8
+what=matrix(0,1,length(unique(x[,i])))
+colnames(what)=sort(unique(x[,i]))
+for (j in 1:length(unique(x[,i]))) {
+  what[1,j]=mean(y[x[,i]==sort(unique(x[,i]))[j]])
+}
+whatcol = c()
+for (j in 1:length(what)-1){
+  whatcol = c(whatcol,what[j+1] >= what[j])
+}
+whatcol = as.numeric(whatcol)+1
+for (j in 1:length(whatcol)) {
+  if (whatcol[j] == 1){
+    whatcol[j] = 4
+  }
+}
+whatcol = c(whatcol,99)
+p =ggplot(data = data, aes(x = x[,i], y = y))+geom_jitter(width = .3)+ggtitle(as.character(colnames(x)[i]))+xlab('type/frequency')+ stat_summary(aes(y = y,group=1), fun.y=mean, colour=whatcol, geom="line",group=1,size = 2)
+print(p)
+for (i in 1:dim(x)[2]) {
+  
+}
 
 
 cl_data=cbind(y,x)
