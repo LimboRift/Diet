@@ -294,6 +294,10 @@ mod_ridge2 = glmnet(data.matrix(train_x), train_y, alpha = 0, lambda = min(mod_r
 mod_el = glmnet(data.matrix(train_x), train_y, alpha = .5)
 mod_el2 = glmnet(data.matrix(train_x), train_y, alpha = .5, lambda = min(mod_el$lambda))
 
+mod_cv = cv.glm(data.matrix(train_x), train_y)
+install.packages('glmnet')
+
+
 #Testing
 
 #lmod
